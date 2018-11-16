@@ -54,6 +54,82 @@ PDETemProTie3Casos.jpg:Plots_hw4.py PDETemProTie3Casos.txt
 
 #2 niveles abajo de la cabeza
 
+#Plots_hw4.py no depende de otro archivo
+
+PosVelTie45.txt:EjecutableDeODE
+	./EjecutableDeODE
+
+PosVelTieTodAng.txt:EjecutableDeODE
+	./EjecutableDeODE
+
+PDEcondIniCaso1.txt:EjecutableDePDE
+	./EjecutableDePDE
+
+PDEEstadoInt1Caso1.txt:EjecutableDePDE
+	./EjecutableDePDE
+
+PDEEstadoInt2Caso1.txt:EjecutableDePDE
+	./EjecutableDePDE
+
+PDEConEquiCaso1.txt:EjecutableDePDE
+	./EjecutableDePDE
+
+PDEcondIniCaso2.txt:EjecutableDePDE	
+	./EjecutableDePDE
+
+PDEEstadoInt1Caso2.txt:EjecutableDePDE
+	./EjecutableDePDE
+
+PDEEstadoInt2Caso2.txt:EjecutableDePDE
+	./EjecutableDePDE
+
+PDEConEquiCaso2.txt:EjecutableDePDE
+	./EjecutableDePDE
+
+PDEcondIniCaso3.txt:EjecutableDePDE
+	./EjecutableDePDE
+
+PDEEstadoInt1Caso3.txt:EjecutableDePDE
+	./EjecutableDePDE
+
+PDEEstadoInt2Caso3.txt:EjecutableDePDE
+	./EjecutableDePDE
+
+PDEConEquiCaso3.txt:EjecutableDePDE
+	./EjecutableDePDE
+
+PDETemProTie3Casos.txt:EjecutableDePDE
+	./EjecutableDePDE
+
+#3 niveles abajo de la cabeza
+
+EjecutableDeODE:ODE.cpp
+	g++ ODE.cpp -o EjecutableDeODE 
+
+EjecutableDePDE:PDE.cpp
+	g++ PDE.cpp -o EjecutableDePDE
+
+#4 niveles abajo de la cabeza
+
+#ODE.cpp no depende de otro archivo
+
+#PDE.cpp no depende de otro archivo
+
+ 
+
+
+
+
+
+
+#el comando de la terminal va a ser g++ ODE.cpp -o EjecutableDeODE		
+
+
+
+
+
+
+
 
 
  
