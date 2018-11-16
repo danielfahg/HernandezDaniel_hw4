@@ -122,7 +122,7 @@ EjecutableDePDE:PDE.cpp
 
 
 
-#el comando de la terminal va a ser g++ ODE.cpp -o EjecutableDeODE		
+		
 
 
 
