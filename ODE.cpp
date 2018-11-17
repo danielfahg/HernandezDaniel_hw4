@@ -34,6 +34,22 @@ int main()
 	//cout<< vxIni<<" y "<<vyIni <<endl;
 
 	//PODRIA FUNCIONAR AQUI HACER UN FOR QUE VALLA CAMBIANDO LOS ANGULOS Y SEGUN EL ANGULO O EL
-	//INDICE IR CAMBIANDO LO QUE IMPRIME Y GUARDA, REVISAR RAPIDAMENTE SI ASI 
+	//INDICE IR CAMBIANDO LO QUE IMPRIME Y GUARDA, REVISAR RAPIDAMENTE SI ASI
+	float angulos[8]={45.0, 10.0, 20.0, 30.0, 40.0, 50.0, 60.0, 70.0};
+	char nombre="lala";
+	for(int a=0; a<8; a++)
+		{
+		//BORRA LINEA O BLOQUE
+		//cout<< angulos[0]<<endl;
+		ofdtream.outfile;
+		outfile.open(nombre);
+		outfile<<"funciono"<<endl;
+		outfile.close();
+
+		angGra=angulos[a];
+		
+
+		}	
+ 
 	return 0;	
 	}
