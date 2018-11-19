@@ -25,7 +25,17 @@ float vxIni=magVelTot*cos(ang);
 
 float vyIni=magVelTot*sin(ang);
 
+float tMax=100.0;//segundos, tiempo maximo
+
+float dt=0.001;//delta t, en segundos
+
+int tieNumInt=(int) (tMax/dt);
+
+int tieNumPun=( (int) (tMax/dt) )+1;
+
 //funciones
+
+float DaMagVel(float vx, float vy);
 
 float DaArchivoYxMax(float varAngGra, int numAng);
 
@@ -54,13 +64,31 @@ int main()
 		
 
 		}*/
-		
+	
+	//Bloque para al iniciar el programa ODE.cpp nuevamente borrar lo que halla en PosVelTieTodAng.txt, pues abajo por
+	//el modo ::app no lo borraria y se desordenaria todo. Con esto PosVelTieTodAng.txt queda en blanco para volver a hacerlo 	
+	ofstream outfile;
+	outfile.open("PosVelTieTodAng.txt");
+	outfile.close();	
+	
+	/*//BORRA BLOQUE
  	DaArchivoYxMax(45.0, 0);
 	DaArchivoYxMax(45.0, 1);
-	
 	DaArchivoYxMax(45.0, 0);
 	DaArchivoYxMax(45.0, 1);
+	DaArchivoYxMax(45.0, 0);
+	DaArchivoYxMax(45.0, 1);*/
+
+	//BORRA BLOQUE O LINEA
+	//cout<<DaMagVel(3.0, 4.0) <<endl;
+	
 	return 0;	
+	}
+
+//da la magnitud del vector velocidad dadas las componentes
+float DaMagVel(float vx, float vy)
+	{
+	return pow( (vx*vx)+(vy*vy) , 0.5);
 	}
 
 //primer numero de angulo numAng es 0, hasta 7 el ultimo
@@ -81,11 +109,68 @@ float DaArchivoYxMax(float varAngGra, int numAng)
 		{
 		outfile.open("PosVelTieTodAng.txt", ios::app); //ios::app mode 
 		}
-	outfile<<"Hola mundo sobrescribe?"<< numAng <<endl;
-	outfile<<"si! parece que si:)"<< numAng <<endl;
+	
+	//BORRA BLOQUE	
+	//outfile<<"Hola mundo sobrescribe?"<< numAng <<endl;
+	//outfile<<"si! parece que si:)"<< numAng <<endl;
+
+	//dado el angulo varAngGra y el numero de el numAng solucionamos la
+	//ecua. diferencial y hallamos la distancia horizontal maxima alcanzada cuando el proyectil toca el piso con altura y=0.0
+	float arr_t[tieNumPun];	
+	float arr_x[tieNumPun];
+	float arr_y[tieNumPun];
+	float arr_vx[tieNumPun];
+	float arr_vy[tieNumPun];
+
+	//Leap Frog necesita posiciones y velocidades para dos indices del tiempo antes, por eso usamos Backward difference
+	//para calcular las posiciones y velocidades en un tiempo antes del inicial, como para tiempo i=-1	
+	float xPas=xIni-( var_vxIni*dt );
+	float yPas=yIni-( var_vyIni*dt );
+	float vxPas=var_vxIni+( (c*dt*DaMagVel(var_vxIni, var_vyIni)*var_vxIni)/(m) );
+	float vyPas=var_vyIni+( dt*( g+( (c*DaMagVel(var_vxIni, var_vyIni)*var_vyIni)/(m) ) ) );
+
+	//tiempo i=0:	
+	//ponemos en posiciones y velocidades del presente las posiciones y velocidades del tiempo i=0
+	float xPre=xIni;
+	float yPre=yIni;
+	float vxPre=var_vxIni;
+	float vyPre=var_vyIni;
+	//las ponemos en .txt 
+	outfile<<xPre<<" "<<yPre<<" "<<vxPre<<" "<<vyPre<<" "<<0.0 <<endl;
+	//ponemos esto en los arreglos de posicion y velocidad para al final hallar la x maxima
+	float arr_t[0]=0.0;	
+	float arr_x[0]=xPre;
+	float arr_y[0]=yPre;
+	float arr_vx[0]=vxPre;
+	float arr_vy[0]=vyPre;
+	//termina lo de tiempo i=0
+
+	//para el resto de tiempos i usamos en cada uno las posiciones y velocidades de las variables
+	//del presente y pasado para calcularlas, y despues acomodamos el nuevo pasado y presente
+	float xFut=0.0;
+	float yFut=0.0;
+	float vxFut=0.0;
+	float vyFut=0.0;
+	for(int i=1; i<=tieNumInt; i++ )//HAY QUE CAMBIAR NOMBRES DE LOS ARREGLOS, SON COMO USADOS POR C++!!!
+		{
+		//para cada tiempo i usamos en cada uno las posiciones y velocidades de las variables
+		//lo del presente y pasado para calcular el los valores del futuro
+		xFut=( vxPre*2.0*dt )+( xPas );
+		yFut=( vyPre*2.0*dt )+( yPas );
+		vxFut=( ( -1.0*c*2.0*dt*DaMagVel(vxPre, vyPre)*vxPre )/(m) )+( vxPas );
+		vyFut=( -2.0*dt*( g+( ( c*DaMagVel(vxPre, vyPre)*vyPre )/(m) ) ) )+( vyPas );
+		//a(n)adimos estos valores al arreglo con todo y tiempo  
+
+		//a(n)adimos estos valores al .txt dado por los condicionales de arriba con todo y tiempo
+
+		//le ponemos a variables del pasado la informacion de las del presente
+
+		//le ponemos a variables del presente la informacion del futuro
+		
+		}
+
 
 	outfile.close();
-
 	return var_xMax;
 	}
 
