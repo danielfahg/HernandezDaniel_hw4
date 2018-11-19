@@ -27,7 +27,7 @@ float vyIni=magVelTot*sin(ang);
 
 float tMax=100.0;//segundos, tiempo maximo
 
-float dt=0.001;//delta t, en segundos
+float dt=0.01;//delta t, en segundos
 
 int tieNumInt=(int) (tMax/dt);
 
@@ -79,6 +79,8 @@ int main()
 	DaArchivoYxMax(45.0, 0);
 	DaArchivoYxMax(45.0, 1);*/
 
+	DaArchivoYxMax(45.0, 1);
+
 	//BORRA BLOQUE O LINEA
 	//cout<<DaMagVel(3.0, 4.0) <<endl;
 	
@@ -116,11 +118,11 @@ float DaArchivoYxMax(float varAngGra, int numAng)
 
 	//dado el angulo varAngGra y el numero de el numAng solucionamos la
 	//ecua. diferencial y hallamos la distancia horizontal maxima alcanzada cuando el proyectil toca el piso con altura y=0.0
-	float arr_t[tieNumPun];	
-	float arr_x[tieNumPun];
-	float arr_y[tieNumPun];
-	float arr_vx[tieNumPun];
-	float arr_vy[tieNumPun];
+	float arret[tieNumPun];//float arre_t[tieNumPun];	//float arr_t[tieNumPun];	
+	float arrex[tieNumPun];//float arre_x[tieNumPun];//float arr_x[tieNumPun];
+	float arrey[tieNumPun];//float arre_y[tieNumPun];//float arr_y[tieNumPun];
+	float arrevx[tieNumPun];//float arre_vx[tieNumPun];//float arr_vx[tieNumPun];
+	float arrevy[tieNumPun];//float arre_vy[tieNumPun];//float arr_vy[tieNumPun];
 
 	//Leap Frog necesita posiciones y velocidades para dos indices del tiempo antes, por eso usamos Backward difference
 	//para calcular las posiciones y velocidades en un tiempo antes del inicial, como para tiempo i=-1	
@@ -138,15 +140,16 @@ float DaArchivoYxMax(float varAngGra, int numAng)
 	//las ponemos en .txt 
 	outfile<<xPre<<" "<<yPre<<" "<<vxPre<<" "<<vyPre<<" "<<0.0 <<endl;
 	//ponemos esto en los arreglos de posicion y velocidad para al final hallar la x maxima
-	float arr_t[0]=0.0;	
-	float arr_x[0]=xPre;
-	float arr_y[0]=yPre;
-	float arr_vx[0]=vxPre;
-	float arr_vy[0]=vyPre;
+	arret[0]=0.0;//float arre_t[0]=0.0;//float arr_t[0]=0.0;	
+	arrex[0]=xPre;//float arre_x[0]=xPre;//float arr_x[0]=xPre;
+	arrey[0]=yPre;//float arre_y[0]=yPre;//float arr_y[0]=yPre;
+	arrevx[0]=vxPre;//float arre_vx[0]=vxPre;//float arr_vx[0]=vxPre;
+	arrevy[0]=vyPre;//float arre_vy[0]=vyPre;//float arr_vy[0]=vyPre;
 	//termina lo de tiempo i=0
 
 	//para el resto de tiempos i usamos en cada uno las posiciones y velocidades de las variables
 	//del presente y pasado para calcularlas, y despues acomodamos el nuevo pasado y presente
+	float tFut=0.0;
 	float xFut=0.0;
 	float yFut=0.0;
 	float vxFut=0.0;
@@ -155,17 +158,32 @@ float DaArchivoYxMax(float varAngGra, int numAng)
 		{
 		//para cada tiempo i usamos en cada uno las posiciones y velocidades de las variables
 		//lo del presente y pasado para calcular el los valores del futuro
+		tFut=( (float) (i) )*dt;		
 		xFut=( vxPre*2.0*dt )+( xPas );
 		yFut=( vyPre*2.0*dt )+( yPas );
 		vxFut=( ( -1.0*c*2.0*dt*DaMagVel(vxPre, vyPre)*vxPre )/(m) )+( vxPas );
 		vyFut=( -2.0*dt*( g+( ( c*DaMagVel(vxPre, vyPre)*vyPre )/(m) ) ) )+( vyPas );
-		//a(n)adimos estos valores al arreglo con todo y tiempo  
-
+		//a(n)adimos estos valores al arreglo con todo y tiempo
+		arret[i]=tFut;
+		arrex[i]=xFut; 
+		arrey[i]=yFut;
+		arrevx[i]=vxFut;
+		arrevy[i]=vyFut;
+		
 		//a(n)adimos estos valores al .txt dado por los condicionales de arriba con todo y tiempo
+		outfile<<xFut<<" "<<yFut<<" "<<vxFut<<" "<<vyFut<<" "<<tFut <<endl;
 
 		//le ponemos a variables del pasado la informacion de las del presente
+		xPas=xPre;
+		yPas=yPre;
+		vxPas=vxPre;
+		vyPas=vyPre;
 
 		//le ponemos a variables del presente la informacion del futuro
+		xPre=xFut;
+		yPre=yFut;
+		vxPre=vxFut;
+		vyPre=vyFut;
 		
 		}
 
