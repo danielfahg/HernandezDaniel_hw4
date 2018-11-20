@@ -25,9 +25,9 @@ float vxIni=magVelTot*cos(ang);
 
 float vyIni=magVelTot*sin(ang);
 
-float tMax=100.0;//segundos, tiempo maximo
+float tMax=2.0;//segundos, tiempo maximo
 
-float dt=0.01;//delta t, en segundos
+float dt=0.00001;//delta t, en segundos
 
 int tieNumInt=(int) (tMax/dt);
 
@@ -86,14 +86,32 @@ int main()
 	DaArchivoYxMax(45.0, 1);
 	DaArchivoYxMax(45.0, 0);
 	DaArchivoYxMax(45.0, 1);*/
+	//cout<<funDer_xDos(1.0, 2.0, 1.0, 4.0, 5.0)<<endl;
 	
-	
-	
+	//cout<< DaArchivoYxMax(10.0, 0)<< endl;
 
-	DaArchivoYxMax(45.0, 0);
+	float arreXMax[8];
+	for(int k=0; k<8; k++)//for(int k=0; k<=8; k++)
+		{
+		arreXMax[k]=DaArchivoYxMax(angulos[k], k);
+		}
+	cout<<"La distancia recorrida por el proyectil para el angulo "<< angulos[0]<<" es "<<arreXMax[0]<<endl;
+
+	float distMayor=0.0;
+	float angDeDistMayor=0.0;
+	for(int l=1; l<8; l++)
+		{
+		if(arreXMax[l]>=distMayor)
+			{
+			distMayor=arreXMax[l];
+			angDeDistMayor=angulos[l];
+			}
+		}
+	cout<<"La distancia recorrida por el proyectil para el angulo "<< angDeDistMayor<<" es la mayor entre los angulos sin tener en cuenta el de 45.0 grados, esta distancia maxima es "<<distMayor<<endl;
 
 	//BORRA BLOQUE O LINEA
 	//cout<<DaMagVel(3.0, 4.0) <<endl;
+	//cout<<abs (-100.0)<<endl;
 	
 	return 0;	
 	}
@@ -127,6 +145,8 @@ float funDer_yDos(float t, float xUno, float xDos, float yUno, float yDos)
 //primer numero de angulo numAng es 0, hasta 7 el ultimo
 float DaArchivoYxMax(float varAngGra, int numAng)
 	{
+	//cout<<funDer_xDos(1.0, 2.0, 1.0, 4.0, 5.0)<<endl;
+
 	float var_xMax=0.0;
 
 	float varAng=(varAngGra*2.0*M_PI)/(360.0);//rads, angulo respecto a la horizontal
@@ -167,7 +187,7 @@ float DaArchivoYxMax(float varAngGra, int numAng)
 	float tPre=0.0;	
 	float xPre=xIni;
 	float yPre=yIni;
-	float vxPre=var_vxIni;
+	float vxPre=magVelTot*cos(varAng);//float vxPre=var_vxIni;
 	float vyPre=var_vyIni;
 	//LP las ponemos en .txt 
 	outfile<<xPre<<" "<<yPre<<" "<<vxPre<<" "<<vyPre<<" "<<tPre <<endl;
@@ -186,6 +206,10 @@ float DaArchivoYxMax(float varAngGra, int numAng)
 	float yFut=0.0;
 	float vxFut=0.0;
 	float vyFut=0.0;
+	
+	//cout<<tPre<< xPre<< vxPre<< yPre<< vyPre<<endl;
+
+
 	for(int i=1; i<=tieNumInt; i++ )//HAY QUE CAMBIAR NOMBRES DE LOS ARREGLOS, SON COMO USADOS POR C++!!!
 		{
 		//por runge kutta de orden 4to basadndonos en el repositorio de la clase en https://github.com/ComputoCienciasUniandes/MetodosComputacionales/blob/master/secciones/10.ODEs/SecondOrder_ODE.ipynb		
@@ -194,6 +218,9 @@ float DaArchivoYxMax(float varAngGra, int numAng)
 		float kUnoDer_xDos=funDer_xDos(tPre, xPre, vxPre, yPre, vyPre);
 		float kUnoDer_yUno=funDer_yUno(tPre, xPre, vxPre, yPre, vyPre);
 		float kUnoDer_yDos=funDer_yDos(tPre, xPre, vxPre, yPre, vyPre);
+
+		//cout<<funDer_xDos(1.0, 2.0, 1.0, 4.0, 5.0)<<endl;
+		//cout<<tPre<< xPre<< vxPre<< yPre<< vyPre<<endl;
 
 		//los cuatro kDos sin las *h, paso uno
 		//para variables:
@@ -239,6 +266,8 @@ float DaArchivoYxMax(float varAngGra, int numAng)
 		float pro_k_xDos=((1.0)/(6.0))*( kUnoDer_xDos+( 2.0*kDosDer_xDos )+( 2.0*kTresDer_xDos )+kCuatroDer_xDos );
 		float pro_k_yUno=((1.0)/(6.0))*( kUnoDer_yUno+( 2.0*kDosDer_yUno )+( 2.0*kTresDer_yUno )+kCuatroDer_yUno );
 		float pro_k_yDos=((1.0)/(6.0))*( kUnoDer_yDos+( 2.0*kDosDer_yDos )+( 2.0*ktresDer_yDos )+kCuatroDer_yDos );
+		
+		//cout<< kUnoDer_xUno<<endl;
 
 		//asignamos los valores de posiciones y velocidades en el siguiente tiempo
 		tFut=tPre+dt;
@@ -263,7 +292,7 @@ float DaArchivoYxMax(float varAngGra, int numAng)
 		arrevy[i]=vyFut;
 		
 		//LF a(n)adimos estos valores al .txt dado por los condicionales de arriba con todo y tiempo
-		outfile<<xFut<<" "<<yFut<<" "<<vxFut<<" "<<vyFut<<" "<<tFut <<endl;
+		outfile<<xFut<<" "<<yFut<<" "<<vxFut<<" "<<vyFut<<" "<<arret[i] <<endl;
 
 		//LF le ponemos a variables del pasado la informacion de las del presente
 		/*xPas=xPre;
@@ -279,6 +308,19 @@ float DaArchivoYxMax(float varAngGra, int numAng)
 		
 		}
 
+	int ind_xMax=1;
+	float yMin=1000.0;
+	float xPeque=0.1;
+
+	for(int j=0; j<=tieNumInt; j++)
+		{
+		if( ( abs (arrey[j]) )<=( abs (yMin) ) && ( (arrex[j])>=xPeque ) )
+			{
+			var_xMax=arrex[j];
+			yMin=arrey[j];
+			ind_xMax=j;
+			}
+		}
 
 	outfile.close();
 	return var_xMax;
